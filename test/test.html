@@ -5,8 +5,16 @@
   <script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
   <script src="../node_modules/mocha/mocha.js"></script>
   <script src="../node_modules/web-component-tester/browser.js"></script>
+
+  <!-- lib dependencies -->
+  <script src="../node_modules/yobo/node_modules/underscore/underscore.js"></script>
+  <script src="../node_modules/yobo/node_modules/backbone/backbone.js"></script>
+  <script src="../backbone-polymer-mixin.js"></script>
+
   <link rel="import" href="../bower_components/polymer/polymer.html">
   <link rel="import" href="../sample-element/sample-element.html">
+
+
 </head>
 <body>
   <sample-element id="sample"/>
@@ -22,6 +30,18 @@
         expect(sample.innerHTML).to.not.match(/>Modified!</);
         sample.greeting = 'Modified!';
         expect(sample.innerHTML).to.match(/>Modified!</);
+      });
+
+    });
+
+    describe("backbone-polymer", function() {
+
+      describe("sample collection, no webpack", function() {
+
+        it("When used without 'require' it exists as a BackbonePolymerNotify global function", function() {
+          expect(BackbonePolymerNotify).to.be.a('function');
+        });
+
       });
 
     });
