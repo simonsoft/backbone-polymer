@@ -61,33 +61,51 @@
           }, renderTimeAllowMs);
 
         });
-/*
-        it("Can be set up to notify the element about changes so they are rendered", function() {
+
+        it("Can be set up to notify the element about changes so they are rendered", function(done) {
 
           var element1 = document.querySelector('#collection1');
 
-          var c1 = new Backbone.Collection({
+          var Collection = Backbone.Collection.extend({
             polymerNotify: BackbonePolymerNotify
           });
+          var c1 = new Collection();
           var m1 = c1.add({type: 'text', content: 'As initialized 2.'});
 
+          // What order is more appropriate?
+          element1.set('collection', c1);
           c1.polymerNotify(element1, 'collection');
 
-          m1.set('content', 'as modified');
+          m1.set('content', 'As modified.');
+
+          window.setTimeout(function() {
+            expect(element1.querySelector('span').innerHTML).to.equal('As modified.');
+            done();
+          }, renderTimeAllowMs);
 
         });
 
-        it("Uses 'this' for the collection, like a regular Backbone member function", function() {
+        it("Uses 'this' for the collection, like a regular Backbone member function", function(done) {
 
           var element1 = document.querySelector('#collection1');
 
           var c1 = new Backbone.Collection();
+          element1.set('collection', c1);
+          // Your application must decide if this happens in a property observer in the element or in the code that sets the property
           BackbonePolymerNotify.call(c1, element1, 'collection');
 
+          var m1 = c1.add({type: 'text', content: 'As added after setup.'});
 
+          m1.set('content', 'As modified after add.');
+
+          window.setTimeout(function() {
+            expect(element1.querySelector('span').innerHTML).to.not.equal('As added after setup.');
+            expect(element1.querySelector('span').innerHTML).to.equal('As modified after add.');
+            done();
+          }, renderTimeAllowMs);
 
         });
-*/
+
       });
 
     });
