@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Simonsoft/backbone-polymer",
   "devDependencies": {
     "bower": "^1.4.1",
+    "mocha": "^2.2.5",
     "web-component-tester": "^3.1.3"
   }
 }
