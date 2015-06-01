@@ -1,17 +1,15 @@
-<dom-module id="collection-item">
+<dom-module id="backbone-ish-model">
   <style>
 
   </style>
   <template>
-
-    <h3>Model</h2>
-
+    <li>{{model.attributes.content}}<li>
   </template>
 </dom-module>
 
 <script>
   Polymer({
-    is: "collection-item",
+    is: "backbone-ish-model",
 
     properties: {
       model: {

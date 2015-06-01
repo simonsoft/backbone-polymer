@@ -43,6 +43,46 @@
           expect(BackbonePolymerNotify).to.be.a('function');
         });
 
+        it("Can be used on an element with a property that is a backbone collection", function() {
+
+          var element1 = document.querySelector('#collection1');
+          expect(element1).to.exist;
+
+          var c1 = new Backbone.Collection();
+          c1.add({type: 'text', content: 'As initialized.'});
+
+          element1.set('collection', c1);
+
+          expect(element1.innerHTML).to.match(/>As initialized.</);
+
+        });
+/*
+        it("Can be set up to notify the element about changes so they are rendered", function() {
+
+          var element1 = document.querySelector('#collection1');
+
+          var c1 = new Backbone.Collection({
+            polymerNotify: BackbonePolymerNotify
+          });
+          var m1 = c1.add({type: 'text', content: 'As initialized 2.'});
+
+          c1.polymerNotify(element1, 'collection');
+
+          m1.set('content', 'as modified');
+
+        });
+
+        it("Uses 'this' for the collection, like a regular Backbone member function", function() {
+
+          var element1 = document.querySelector('#collection1');
+
+          var c1 = new Backbone.Collection();
+          BackbonePolymerNotify.call(c1, element1, 'collection');
+
+
+
+        });
+*/
       });
 
     });
