@@ -23,6 +23,19 @@
       collection: {
         type: Object
       }
-    }
+    },
+
+    observers: [
+      'modelsAddedOrRemoved(collection.models.splices)'
+    ],
+
+    modelsAddedOrRemoved: function(changeRecord) {
+      if (typeof changeRecord === 'undefined') {
+        // This does happen, which may indicate that we're doing something wrong
+        console.warn('undefined change record');
+        return;
+      }
+      console.log('modelsAddedOrRemoved', changeRecord.indexSplices, 'keys:', changeRecord.keySplices);
+    },
   });
 </script>

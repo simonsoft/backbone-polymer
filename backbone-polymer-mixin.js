@@ -20,9 +20,18 @@ var BackbonePolymerNotify = function(element, pathPrefix) {
 
   var addNotify = function(model) {
     var ix = indexOf(model);
-    console.log('add', model, ix);
-    // Neither of the below makes any difference, and the model element seems to be rendered with an empty content attribute even without this notify
-    element.notifyPath(pathPrefix + '.models.' + ix, model);
+    // https://www.polymer-project.org/1.0/docs/devguide/properties.html#array-observation
+    element.notifyPath(pathPrefix + '.models.splices', {
+      keySplices: [{
+        index: ix,
+        added: [ix],
+        removed: [],
+        removedItems: []
+      }]
+    });
+
+    return;
+
     for (var attribute in model.attributes) {
       var value = model.get(attribute);
       console.log('add attribute', attribute, value);
@@ -32,7 +41,7 @@ var BackbonePolymerNotify = function(element, pathPrefix) {
 
   this.each(modelSetup.bind(this));
   this.on('add', addNotify.bind(this));
-  this.on('add', modelSetup.bind(this));
+  //this.on('add', modelSetup.bind(this));
 };
 
 if (typeof module !== 'undefined') {
