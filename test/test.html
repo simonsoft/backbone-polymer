@@ -57,6 +57,7 @@
 
           window.setTimeout(function() {
             expect(element1.innerHTML).to.match(/>As initialized.</);
+            done();
           }, renderTimeAllowMs);
 
         });
