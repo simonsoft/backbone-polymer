@@ -4,6 +4,7 @@
   "description": "Makes Backbone Collection observable in webcomponents and Polymer templates",
   "main": "index.js",
   "scripts": {
+    "postinstall": "./node_modules/bower/bin/bower install",
     "test": "./node_modules/.bin/wct"
   },
   "repository": {
