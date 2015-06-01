@@ -1,0 +1,19 @@
+{
+  "name": "backbone-polymer",
+  "version": "0.0.1",
+  "description": "Makes Backbone Collection observable in webcomponents and Polymer templates",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Simonsoft/backbone-polymer"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Simonsoft/backbone-polymer/issues"
+  },
+  "homepage": "https://github.com/Simonsoft/backbone-polymer"
+}
