@@ -1,0 +1,27 @@
+<dom-module id="element-name">
+  <style>
+    /* CSS rules for your element */
+  </style>
+  <template>
+    <!-- local DOM for your element -->
+
+    <div>{{greeting}}</div> <!-- data bindings in local DOM -->
+  </template>
+</dom-module>
+
+<script>
+  // element registration
+  Polymer({
+    is: "element-name",
+
+    // add properties and methods on the element's prototype
+
+    properties: {
+      // declare properties for the element's public API
+      greeting: {
+        type: String,
+        value: "Hello!"
+      }
+    }
+  });
+</script>

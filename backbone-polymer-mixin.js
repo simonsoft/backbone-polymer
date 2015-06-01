@@ -1,8 +1,10 @@
 
-module.exports = {
+var BackbonePolymerNotify = function(element, pathPrefix) {
+  console.log('BackbonePolymerNotify called', element, pathPrefix);
+};
 
-  polymerNotify: function(element, pathPrefix) {
-    
-  }
-
+if (typeof module !== 'undefined') {
+  module.exports = {
+    polymerNotify: BackbonePolymerNotify
+  };
 };
