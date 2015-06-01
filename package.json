@@ -17,8 +17,11 @@
   },
   "homepage": "https://github.com/Simonsoft/backbone-polymer",
   "devDependencies": {
+    "async": "^1.1.0",
     "bower": "^1.4.1",
+    "chai": "^2.3.0",
     "mocha": "^2.2.5",
+    "stacky": "^1.2.2",
     "web-component-tester": "^3.1.3"
   }
 }
