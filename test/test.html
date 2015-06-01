@@ -11,10 +11,12 @@
 <body>
   <sample-element/>
   <script>
-    suite('<sample-element>', function() {
-      test('Renders the greeting property', function() {
-        assert.equal(document.querySelector('#greeting').innerHTML, 'Hello!');
+    describe('<sample-element>', function() {
+
+      it('Renders the greeting property', function() {
+        expect(document.querySelector('#greeting').innerHTML).to.equal('Hello!');
       });
+
     });
   </script>
 </body>
