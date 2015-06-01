@@ -39,11 +39,13 @@
 
       describe("sample collection, no webpack", function() {
 
+        var renderTimeAllowMs = 10;
+
         it("When used without 'require' it exists as a BackbonePolymerNotify global function", function() {
           expect(BackbonePolymerNotify).to.be.a('function');
         });
 
-        it("Can be used on an element with a property that is a backbone collection", function() {
+        it("Can be used on an element with a property that is a backbone collection", function(done) {
 
           var element1 = document.querySelector('#collection1');
           expect(element1).to.exist;
@@ -53,7 +55,9 @@
 
           element1.set('collection', c1);
 
-          expect(element1.innerHTML).to.match(/>As initialized.</);
+          window.setTimeout(function() {
+            expect(element1.innerHTML).to.match(/>As initialized.</);
+          }, renderTimeAllowMs);
 
         });
 /*
