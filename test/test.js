@@ -1,15 +1,11 @@
 
-describe('<sample-element>', function() {
+describe('<collection> sample element', function() {
 
-  it('Renders the greeting property', function() {
-    expect(document.querySelector('#greeting').innerHTML).to.equal('Hello!');
-  });
+  it("Typically has a property that takes a backbone collection", function() {
 
-  it("Responds to changes in the property's value", function() {
-    var sample = document.querySelector('#sample');
-    expect(sample.innerHTML).to.not.match(/>Modified!</);
-    sample.greeting = 'Modified!';
-    expect(sample.innerHTML).to.match(/>Modified!</);
+    var collection1 = document.querySelector('#collection1');
+    expect(collection1).to.not.exist;
+
   });
 
 });

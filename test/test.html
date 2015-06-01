@@ -6,10 +6,18 @@
   <script src="../node_modules/mocha/mocha.js"></script>
   <script src="../node_modules/web-component-tester/browser.js"></script>
   <link rel="import" href="../bower_components/polymer/polymer.html">
+
   <link rel="import" href="../sample-element/sample-element.html">
+
+  <script src="../node_modules/yobo/node_modules/underscore/underscore.js"></script>
+  <script src="../node_modules/yobo/node_modules/backbone/backbone.js"></script>
+  <script src="../backbone-polymer-mixin.js"></script>
+  <link rel="import" href="../collecttion-element/collection.html">
 </head>
 <body>
   <sample-element id="sample"/>
+  <collection id="collection1"/>
+  <script src="sample-test.js"></script>
   <script src="test.js"></script>
 </body>
 </html>
