@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
+  <script src="../node_modules/web-component-tester/browser.js"></script>
+  <link rel="import" href="../sample-element/sample-element.html">
+</head>
+<body>
+  <awesome-element id="fixture"></awesome-element>
+  <script>
+    suite('<sample-element>', function() {
+      test('is awesomest', function() {
+        assert.isTrue(document.getElementById('fixture').awesomest);
+      });
+    });
+  </script>
+</body>
+</html>
