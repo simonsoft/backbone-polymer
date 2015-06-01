@@ -95,11 +95,20 @@
           // Your application must decide if this happens in a property observer in the element or in the code that sets the property
           BackbonePolymerNotify.call(c1, element1, 'collection');
 
-          var m1 = c1.add({type: 'text', content: 'As added after setup.'});
-
-          m1.set('content', 'As modified after add.');
+          // Polymer renders an undefined model if the add is done directly after the collection property is set
+          // ... which might be rather unrealistic
+          var m1;
 
           window.setTimeout(function() {
+            m1 = c1.add({type: 'text', content: 'As added after setup.'});
+          }, renderTimeAllowMs);
+
+          window.setTimeout(function() {
+            m1.set('content', 'As modified after add.');
+          }, renderTimeAllowMs + 1);
+
+          window.setTimeout(function() {
+            expect(element1.querySelector('span')).to.exist;
             expect(element1.querySelector('span').innerHTML).to.not.equal('As added after setup.');
             expect(element1.querySelector('span').innerHTML).to.equal('As modified after add.');
             done();
