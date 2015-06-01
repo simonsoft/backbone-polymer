@@ -7,11 +7,10 @@
   <template>
 
     <h2>Collection</h2>
-    <ul>
-      <template is="dom-repeat" items="{{collection.models}}">
-        <backbone-ish-model model="{{item}}"></backbone-ish-model>
-      </template>
-    </ul>
+
+    <template is="dom-repeat" items="{{collection.models}}">
+      <backbone-ish-model model="{{item}}"></backbone-ish-model>
+    </template>
 
   </template>
 </dom-module>
