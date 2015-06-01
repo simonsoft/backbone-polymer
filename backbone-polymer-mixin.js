@@ -18,7 +18,20 @@ var BackbonePolymerNotify = function(element, pathPrefix) {
     });
   };
 
+  var addNotify = function(model) {
+    var ix = indexOf(model);
+    console.log('add', model, ix);
+    // Neither of the below makes any difference, and the model element seems to be rendered with an empty content attribute even without this notify
+    element.notifyPath(pathPrefix + '.models.' + ix, model);
+    for (var attribute in model.attributes) {
+      var value = model.get(attribute);
+      console.log('add attribute', attribute, value);
+      element.notifyPath(pathPrefix + '.models.' + ix + '.attributes.' + attribute, value);
+    }
+  };
+
   this.each(modelSetup.bind(this));
+  this.on('add', addNotify.bind(this));
   this.on('add', modelSetup.bind(this));
 };
 

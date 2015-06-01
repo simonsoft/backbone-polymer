@@ -90,6 +90,7 @@
           var element1 = document.querySelector('#collection1');
 
           var c1 = new Backbone.Collection();
+
           element1.set('collection', c1);
           // Your application must decide if this happens in a property observer in the element or in the code that sets the property
           BackbonePolymerNotify.call(c1, element1, 'collection');
