@@ -13,35 +13,45 @@ var BackbonePolymerNotify = function(element, pathPrefix) {
         console.log('model', model.cid, 'changed', attribute);
         var ix = indexOf(model);
         var value = model.get(attribute);
+        console.log('modify:', pathPrefix + '.models.' + ix + '.attributes.' + attribute, value);
         element.notifyPath(pathPrefix + '.models.' + ix + '.attributes.' + attribute, value);
       }
     });
   };
 
+  var splicesObject = this.models;
+
   var addNotify = function(model) {
     var ix = indexOf(model);
+
     // https://www.polymer-project.org/1.0/docs/devguide/properties.html#array-observation
-    element.notifyPath(pathPrefix + '.models.splices', {
-      keySplices: [{
-        index: ix,
-        added: [ix],
-        removed: [],
-        removedItems: []
-      }]
+    var change = {keySplices:[], indexSplices:[]};
+    change.keySplices.push({
+      index: ix,
+      removed: [],
+      removedItems: [],
+      added: [ix]
+    });
+    change.indexSplices.push({
+      index: ix,
+      addedCount: 1,
+      removed: [],
+      object: splicesObject,
+      type: 'splice'
     });
 
-    return;
+    element.notifyPath(pathPrefix + '.models.splices', change);
 
     for (var attribute in model.attributes) {
       var value = model.get(attribute);
-      console.log('add attribute', attribute, value);
+      console.log('add, initial value:', pathPrefix + '.models.' + ix + '.attributes.' + attribute, value);
       element.notifyPath(pathPrefix + '.models.' + ix + '.attributes.' + attribute, value);
     }
   };
 
   this.each(modelSetup.bind(this));
   this.on('add', addNotify.bind(this));
-  //this.on('add', modelSetup.bind(this));
+  this.on('add', modelSetup.bind(this));
 };
 
 if (typeof module !== 'undefined') {
