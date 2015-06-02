@@ -1,0 +1,20 @@
+<dom-module id="backbone-ish-model">
+  <style>
+
+  </style>
+  <template>
+    <p>Model: <span>{{model.attributes.content}}</span><p>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: "backbone-ish-model",
+
+    properties: {
+      model: {
+        type: Object
+      }
+    }
+  });
+</script>

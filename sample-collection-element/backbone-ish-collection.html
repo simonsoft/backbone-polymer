@@ -1,0 +1,42 @@
+<link rel="import" href="backbone-ish-model.html">
+
+<dom-module id="backbone-ish-collection">
+  <style>
+
+  </style>
+  <template>
+
+    <h2>Collection</h2>
+
+    <template is="dom-repeat" items="{{collection.models}}">
+      <backbone-ish-model model="{{item}}"></backbone-ish-model>
+    </template>
+
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: "backbone-ish-collection",
+
+    properties: {
+      collection: {
+        type: Object
+      }
+    },
+
+    observers: [
+      'modelsAddedOrRemoved(collection.models.splices)'
+    ],
+
+    modelsAddedOrRemoved: function(changeRecord) {
+      if (typeof changeRecord === 'undefined') {
+        // This does happen, which may indicate that we're doing something wrong
+        console.warn('undefined change record');
+        return;
+      }
+      // But does this ever happen?
+      console.log('modelsAddedOrRemoved', changeRecord.indexSplices, 'keys:', changeRecord.keySplices);
+    },
+  });
+</script>

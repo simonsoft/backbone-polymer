@@ -5,11 +5,20 @@
   <script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
   <script src="../node_modules/mocha/mocha.js"></script>
   <script src="../node_modules/web-component-tester/browser.js"></script>
+
+  <!-- lib dependencies -->
+  <script src="../node_modules/yobo/node_modules/underscore/underscore.js"></script>
+  <script src="../node_modules/yobo/node_modules/backbone/backbone.js"></script>
+  <script src="../backbone-polymer-mixin.js"></script>
+
   <link rel="import" href="../bower_components/polymer/polymer.html">
   <link rel="import" href="../sample-element/sample-element.html">
+
+  <link rel="import" href="../sample-collection-element/backbone-ish-collection.html">
 </head>
 <body>
-  <sample-element id="sample"/>
+  <sample-element id="sample"></sample-element>
+  <backbone-ish-collection id="collection1"></backbone-ish-collection>
   <script>
     describe('<sample-element>', function() {
 
@@ -22,6 +31,99 @@
         expect(sample.innerHTML).to.not.match(/>Modified!</);
         sample.greeting = 'Modified!';
         expect(sample.innerHTML).to.match(/>Modified!</);
+      });
+
+    });
+
+    describe("backbone-polymer", function() {
+
+      describe("sample collection, no webpack", function() {
+
+        var renderTimeAllowMs = 10;
+
+        it("When used without 'require' it exists as a BackbonePolymerNotify global function", function() {
+          expect(BackbonePolymerNotify).to.be.a('function');
+        });
+
+        it("Can be used on an element with a property that is a backbone collection", function(done) {
+
+          var element1 = document.querySelector('#collection1');
+          expect(element1).to.exist;
+
+          var c1 = new Backbone.Collection();
+          c1.add({type: 'text', content: 'As initialized.'});
+
+          element1.set('collection', c1);
+
+          window.setTimeout(function() {
+            expect(element1.innerHTML).to.match(/>As initialized.</);
+            done();
+          }, renderTimeAllowMs);
+
+        });
+
+        it("Can be set up to notify the element about changes so they are rendered", function(done) {
+
+          var element1 = document.querySelector('#collection1');
+
+          var Collection = Backbone.Collection.extend({
+            polymerNotify: BackbonePolymerNotify
+          });
+          var c1 = new Collection();
+          var m1 = c1.add({type: 'text', content: 'As initialized 2.'});
+
+          // What order is more appropriate?
+          element1.set('collection', c1);
+          c1.polymerNotify(element1, 'collection');
+
+          m1.set('content', 'As modified.');
+
+          window.setTimeout(function() {
+            expect(element1.querySelector('span').innerHTML).to.equal('As modified.');
+            done();
+          }, renderTimeAllowMs);
+
+        });
+
+        it("Uses 'this' for the collection, like a regular Backbone member function", function(done) {
+
+          var element1 = document.querySelector('#collection1');
+
+          var c1 = new Backbone.Collection();
+
+          element1.set('collection', c1);
+          // Your application must decide if this happens in a property observer in the element or in the code that sets the property
+          BackbonePolymerNotify.call(c1, element1, 'collection');
+
+          // test splices values, together with debugging in polymer/src/lib/template/dom-repeat.html _itemsChanged
+          //element1.push('collection.models', new Backbone.Model({type: 'polymer', content: 'Added through element API.'}));
+          //element1.push('collection.models', {attributes: {type: 'polymer', content: 'Added 2 through element API.'}});
+
+          // Polymer renders an undefined model if the add is done directly after the collection property is set
+          // ... which might be rather unrealistic
+          var m1;
+
+          expect(renderTimeAllowMs).to.be.at.least(2); // the sequence below is fragile, and there's a timeout in the notification too
+
+          window.setTimeout(function() {
+            m1 = c1.add({type: 'text', content: 'As added after setup.'});
+          }, renderTimeAllowMs);
+
+          window.setTimeout(function() {
+            // We actually get this but I fail to pick it up in assert
+            expect(element1.querySelector('span').innerHTML).to.equal('As added after setup.');
+            m1.set('content', 'As modified after add.');
+          }, renderTimeAllowMs * 2 - 1);
+
+          window.setTimeout(function() {
+            expect(element1.querySelector('span')).to.exist;
+            expect(element1.querySelector('span').innerHTML).to.not.equal('As added after setup.');
+            expect(element1.querySelector('span').innerHTML).to.equal('As modified after add.');
+            done();
+          }, renderTimeAllowMs * 2);
+
+        });
+
       });
 
     });
