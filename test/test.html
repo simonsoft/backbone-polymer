@@ -103,20 +103,24 @@
           // ... which might be rather unrealistic
           var m1;
 
+          expect(renderTimeAllowMs).to.be.at.least(2); // the sequence below is fragile, and there's a timeout in the notification too
+
           window.setTimeout(function() {
             m1 = c1.add({type: 'text', content: 'As added after setup.'});
           }, renderTimeAllowMs);
 
           window.setTimeout(function() {
+            // We actually get this but I fail to pick it up in assert
+            expect(element1.querySelector('span').innerHTML).to.equal('As added after setup.');
             m1.set('content', 'As modified after add.');
-          }, renderTimeAllowMs + 1);
+          }, renderTimeAllowMs * 2 - 1);
 
           window.setTimeout(function() {
             expect(element1.querySelector('span')).to.exist;
             expect(element1.querySelector('span').innerHTML).to.not.equal('As added after setup.');
             expect(element1.querySelector('span').innerHTML).to.equal('As modified after add.');
             done();
-          }, renderTimeAllowMs);
+          }, renderTimeAllowMs * 2);
 
         });
 

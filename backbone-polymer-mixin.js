@@ -13,7 +13,6 @@ var BackbonePolymerNotify = function(element, pathPrefix) {
         console.log('model', model.cid, 'changed', attribute);
         var ix = indexOf(model);
         var value = model.get(attribute);
-        console.log('modify:', pathPrefix + '.models.' + ix + '.attributes.' + attribute, value);
         element.notifyPath(pathPrefix + '.models.' + ix + '.attributes.' + attribute, value);
       }
     });
@@ -42,11 +41,15 @@ var BackbonePolymerNotify = function(element, pathPrefix) {
 
     element.notifyPath(pathPrefix + '.models.splices', change);
 
-    for (var attribute in model.attributes) {
-      var value = model.get(attribute);
-      console.log('add, initial value:', pathPrefix + '.models.' + ix + '.attributes.' + attribute, value);
-      element.notifyPath(pathPrefix + '.models.' + ix + '.attributes.' + attribute, value);
-    }
+    // remove this timeout and the rendered element goes blank
+    window.setTimeout(function() {
+      // TODO would it be possible to notify .* here?
+      for (var attribute in model.attributes) {
+        // we could reuse code with modelSetup here
+        var value = model.get(attribute);
+        element.notifyPath(pathPrefix + '.models.' + ix + '.attributes.' + attribute, value);
+      }
+    }, 1);
   };
 
   this.each(modelSetup.bind(this));
