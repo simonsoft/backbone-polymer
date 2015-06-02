@@ -39,7 +39,7 @@
 
       describe("Backbone collection, setup without Webpack", function() {
 
-        var renderTimeAllowMs = 10;
+        var renderTimeAllowMs = 50;
 
         it("When used without 'require' it exists as a BackbonePolymerAttach global function", function() {
           expect(BackbonePolymerAttach).to.be.a('function');
@@ -111,7 +111,7 @@
 
           window.setTimeout(function() {
             // We actually get this but I fail to pick it up in assert
-            expect(element1.querySelector('span').innerHTML).to.equal('As added after setup.');
+            expect(element1.querySelector('p').innerHTML).to.match(/As added after setup./);
             m1.set('content', 'As modified after add.');
           }, renderTimeAllowMs * 2 - 1);
 
