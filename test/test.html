@@ -35,14 +35,14 @@
 
     });
 
-    describe("backbone-polymer", function() {
+    describe("Element that renders .models with sub-element that renders item.attributes", function() {
 
-      describe("sample collection, no webpack", function() {
+      describe("Backbone collection, setup without Webpack", function() {
 
         var renderTimeAllowMs = 10;
 
-        it("When used without 'require' it exists as a BackbonePolymerNotify global function", function() {
-          expect(BackbonePolymerNotify).to.be.a('function');
+        it("When used without 'require' it exists as a BackbonePolymerAttach global function", function() {
+          expect(BackbonePolymerAttach).to.be.a('function');
         });
 
         it("Can be used on an element with a property that is a backbone collection", function(done) {
@@ -67,7 +67,7 @@
           var element1 = document.querySelector('#collection1');
 
           var Collection = Backbone.Collection.extend({
-            polymerNotify: BackbonePolymerNotify
+            polymerNotify: BackbonePolymerAttach
           });
           var c1 = new Collection();
           var m1 = c1.add({type: 'text', content: 'As initialized 2.'});
@@ -93,7 +93,7 @@
 
           element1.set('collection', c1);
           // Your application must decide if this happens in a property observer in the element or in the code that sets the property
-          BackbonePolymerNotify.call(c1, element1, 'collection');
+          BackbonePolymerAttach.call(c1, element1, 'collection');
 
           // test splices values, together with debugging in polymer/src/lib/template/dom-repeat.html _itemsChanged
           //element1.push('collection.models', new Backbone.Model({type: 'polymer', content: 'Added through element API.'}));
