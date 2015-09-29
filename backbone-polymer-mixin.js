@@ -32,7 +32,8 @@ var BackbonePolymerAttach = function(element, pathPrefix) {
       addedCount: 1,
       removed: [],
       object: splicesObject,
-      type: 'splice'
+      type: 'splice',
+      addedKeys: [ix]
     });
 
     element.notifyPath(pathPrefix + '.models.splices', change);

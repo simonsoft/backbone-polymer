@@ -1,6 +1,6 @@
 {
   "name": "backbone-polymer",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Makes Backbone Collection observable in webcomponents and Polymer templates",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "chai": "^2.3.0",
     "mocha": "^2.2.5",
     "stacky": "^1.2.2",
-    "web-component-tester": "^3.2.0"
+    "web-component-tester": "^3.3.17"
   },
   "dependencies": {
     "yobo": "^0.3.0"
