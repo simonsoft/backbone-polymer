@@ -19,6 +19,7 @@
 <body>
   <sample-element id="sample"></sample-element>
   <backbone-ish-collection id="collection1"></backbone-ish-collection>
+  <backbone-ish-collection id="collection2"></backbone-ish-collection>
   <script>
     describe('<sample-element>', function() {
 
@@ -91,6 +92,7 @@
 
           var c1 = new Backbone.Collection();
 
+
           element1.set('collection', c1);
           // Your application must decide if this happens in a property observer in the element or in the code that sets the property
           BackbonePolymerAttach.call(c1, element1, 'collection');
@@ -102,31 +104,65 @@
           // Polymer renders an undefined model if the add is done directly after the collection property is set
           // ... which might be rather unrealistic
           var m1;
+          var m2;
 
           expect(renderTimeAllowMs).to.be.at.least(2); // the sequence below is fragile, and there's a timeout in the notification too
 
           window.setTimeout(function() {
             m1 = c1.add({type: 'text', content: 'As added after setup.'});
+            m2 = c1.add({type: 'text', content: 'one more is added.'});
+
           }, renderTimeAllowMs);
 
           window.setTimeout(function() {
             // We actually get this but I fail to pick it up in assert
+            expect(element1.querySelectorAll('span').length).to.equal(2);
+
             expect(element1.querySelector('p').innerHTML).to.match(/As added after setup./);
+            expect(element1.querySelectorAll('p')[2].innerHTML).to.match(/one more is added./);
             m1.set('content', 'As modified after add.');
+            m2.set('content', 'An other modification');
           }, renderTimeAllowMs * 2 - 1);
 
           window.setTimeout(function() {
             expect(element1.querySelector('span')).to.exist;
             expect(element1.querySelector('span').innerHTML).to.not.equal('As added after setup.');
             expect(element1.querySelector('span').innerHTML).to.equal('As modified after add.');
+            expect(element1.querySelectorAll('span')[1].innerHTML).to.equal('An other modification');
             done();
           }, renderTimeAllowMs * 2);
 
         });
 
+        it("will add another collection", function(done) {
+          var element1 = document.querySelector('#collection1');
+
+          var c2 = new Backbone.Collection();
+          var m1 = c2.add({type: 'text', content: 'from c2'});
+
+          element1.set('collection', c2);
+
+          // BackbonePolymerAttach.call(c2, element1, 'collection');
+
+          window.setTimeout(function() {
+            expect(element1.querySelectorAll('span').length).to.equal(1);
+            expect(element1.querySelector('p').innerHTML).to.match(/from c2/);
+            m1.set('content','arrgghh! we did som editing');
+            done();
+          },renderTimeAllowMs * 2);
+
+
+          window.setTimeout(function() {
+            expect(element1.querySelectorAll('span').length).to.equal(1);
+            expect(element1.querySelectorAll('p').length).to.equal(1);
+            expect(element1.querySelector('span').innerHTML).to.equal('arrgghh! we did som editing');
+            done();
+          },renderTimeAllowMs * 2);
+        });
+
       });
 
     });
-  </script>
+    </script>
 </body>
 </html>
