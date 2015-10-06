@@ -15,7 +15,19 @@ var BackbonePolymerAttach = function(element, pathPrefix) {
   };
 
   this.each(modelSetup.bind(this));
-  this.on('add', modelSetup.bind(this));
+
+  var _add = this.add;
+  this.add = function(models, options) {
+    if (typeof models.length !== 'undefined') {
+      throw new Error('backbone-polymer only accepts add of single model');
+    }
+    // we should probably operate on the Collection.set level to be more allowing
+    if (!this._isModel(models)) {
+      throw new Error('backbone-polymer requires model instances, not just attributes');
+    }
+
+    modelSetup.bind(models);
+  };
 };
 
 if (typeof module !== 'undefined') {

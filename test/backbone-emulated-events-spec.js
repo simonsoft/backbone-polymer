@@ -44,6 +44,22 @@ describe("Array modification through Polymer splices, emulate backbone events", 
 
   describe("#add", function() {
 
+    it("ATM accepts only a single item", function() {
+      expect(function() {
+        var c = new Backbone.Collection();
+        BackbonePolymerAttach.call(c, new PolymerElementMock(), 'edit.units');
+        c.add([]);
+      }).to.throw(/single/);
+    });
+
+    it("ATM requires that item to be a real model", function() {
+      expect(function() {
+        var c = new Backbone.Collection();
+        BackbonePolymerAttach.call(c, new PolymerElementMock(), 'edit.units');
+        c.add({id: 'add1', type: 'test'});
+      }).to.throw(/requires model instance/);
+    });
+
     it("Is transparent to backbone add event listener", function() {
       var e = new PolymerElementMock();
       var c = new Backbone.Collection();
