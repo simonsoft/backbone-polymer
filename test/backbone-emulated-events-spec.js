@@ -71,12 +71,35 @@ describe("Array modification through Polymer splices, emulate backbone events", 
       var e = new PolymerElementMock();
       var c = new Backbone.Collection();
       var adds = [];
+
       c.on('add', function() { adds.push(arguments); });
       BackbonePolymerAttach.call(c, e, 'edit.units');
       var m = c.add(new Backbone.Model({id: 'add1', type: 'test'}));
+
       expect(m.get('type')).to.equal('test');
       expect(adds).to.have.length(1);
       expect(e.spliced).to.have.length(1);
+
+      //Expects on the options obj.
+      expect(adds[0][2]).to.be.an('object');
+      expect(adds[0][2]).to.have.property('add').and.equal(true);
+      expect(adds[0][2]).to.have.property('merge').and.equal(false);
+      expect(adds[0][2]).to.have.property('remove').and.equal(false);
+
+      var m1 = new Backbone.Model({id: 'add2', type: 'test'});
+      c.add(m1, {at: 1});
+
+      //Adding at an index, expects Options to have 'at'
+      expect(adds[1][2]).to.have.property('add').and.equal(true);
+      expect(adds[1][2]).to.have.property('at').and.equal(1);
+      expect(e.spliced).to.have.length(2);
+
+      //Adding again at index 2
+      var m2 = new Backbone.Model({id: 'add3', type: 'test'});
+      c.add(m2, {at: 2});
+      
+      expect(e.spliced[2]).to.have.property('index').and.equal(2);
+
     });
 
   });
