@@ -16,17 +16,28 @@ var BackbonePolymerAttach = function(element, pathPrefix) {
 
   this.each(modelSetup.bind(this));
 
+  // override Backbone add
   var _add = this.add;
-  this.add = function(models, options) {
-    if (typeof models.length !== 'undefined') {
+  var addOptions = {add: true, remove: false}; // from backbone source
+  this.add = function(model, options) {
+    if (_.isArray(model)) {
       throw new Error('backbone-polymer only accepts add of single model');
     }
     // we should probably operate on the Collection.set level to be more allowing
-    if (!this._isModel(models)) {
+    if (!this._isModel(model)) {
       throw new Error('backbone-polymer requires model instances, not just attributes');
     }
 
-    modelSetup.bind(models);
+    var options = _.extend({merge: false}, options, addOptions);
+    var ix = options.at || 0;
+
+    element.splice(pathPrefix + '.models', ix, 0, [model]);
+    if (!options.silent) {
+      this.trigger('add', model, this, options);
+    }
+
+    modelSetup.bind(model);
+    return model;
   };
 };
 

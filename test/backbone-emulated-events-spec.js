@@ -1,12 +1,19 @@
 
 var expect = require('chai').expect;
-var BackbonePolymerAttach = require('../backbone-polymer-mixin');
+
+// still undecided on how the mixin gets dependencies
+_ = require('yobo')._;
+
 var Backbone = require('yobo').Backbone;
+
+var BackbonePolymerAttach = require('../backbone-polymer-mixin');
 
 var PolymerElementMock = function() {
 
+  var spliced = this.spliced = [];
+
   this.splice = function(path, index, removeCount, items) {
-    console.log('Polymer got splice', arguments);
+    spliced.push({path: path, index: index, removeCount: removeCount, items: items});
   };
 
   this.notifyPath = function() {
@@ -69,6 +76,7 @@ describe("Array modification through Polymer splices, emulate backbone events", 
       var m = c.add(new Backbone.Model({id: 'add1', type: 'test'}));
       expect(m.get('type')).to.equal('test');
       expect(adds).to.have.length(1);
+      expect(e.spliced).to.have.length(1);
     });
 
   });
