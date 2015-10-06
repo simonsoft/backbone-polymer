@@ -14,43 +14,7 @@ var BackbonePolymerAttach = function(element, pathPrefix) {
     });
   };
 
-  var splicesObject = this.models;
-
-  var addNotify = function(model) {
-    var ix = indexOf(model);
-
-    // https://www.polymer-project.org/1.0/docs/devguide/properties.html#array-observation
-    var change = {keySplices:[], indexSplices:[]};
-    change.keySplices.push({
-      index: ix,
-      removed: [],
-      removedItems: [],
-      added: [ix]
-    });
-    change.indexSplices.push({
-      index: ix,
-      addedCount: 1,
-      removed: [],
-      object: splicesObject,
-      type: 'splice',
-      addedKeys: [ix]
-    });
-
-    element.notifyPath(pathPrefix + '.models.splices', change);
-
-    // remove this timeout and the rendered element goes blank
-    window.setTimeout(function() {
-      // TODO would it be possible to notify .* here?
-      for (var attribute in model.attributes) {
-        // we could reuse code with modelSetup here
-        var value = model.get(attribute);
-        element.notifyPath(pathPrefix + '.models.' + ix + '.attributes.' + attribute, value);
-      }
-    }, 1);
-  };
-
   this.each(modelSetup.bind(this));
-  this.on('add', addNotify.bind(this));
   this.on('add', modelSetup.bind(this));
 };
 
