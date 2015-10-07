@@ -80,7 +80,7 @@ describe("Array modification through Polymer splices, emulate backbone events", 
         var m = new Backbone.Model({id: 'add1', type: 'test'});
         c.add(m);
         c.add(m);
-      }).to.throw(/Model add blocked because it already exists as cid \d+/);
+      }).to.throw(/backbone-polymer model already exists as cid \w+/);
     });
 
     it("Is transparent to backbone add event listener", function() {

@@ -27,15 +27,17 @@ var BackbonePolymerAttach = function(element, pathPrefix) {
       throw new Error('backbone-polymer requires model instances, not just attributes');
     }
     if (this.get(model)) {
-      throw new Error('model already exists as' + this.get(model).cid);
+      throw new Error('backbone-polymer model already exists as cid ' + this.get(model).cid);
     }
 
     var options = _.extend({merge: false}, options, addOptions);
     var ix = options.at || 0;
 
     element.splice(pathPrefix + '.models', ix, 0, model);
+    this._addReference(model, options);
     if (!options.silent) {
-      this.trigger('add', model, this, options);
+      model.trigger('add', model, this, options);
+      this.trigger('update', this, options);
     }
 
     modelSetup.bind(model);
