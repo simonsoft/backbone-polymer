@@ -73,6 +73,16 @@ describe("Array modification through Polymer splices, emulate backbone events", 
       }).to.throw(/requires model instance/);
     });
 
+    it("Bails out if the model already exists", function() {
+      expect(function() {
+        var c = new Backbone.Collection();
+        BackbonePolymerAttach.call(c, new PolymerElementMock(), 'edit.units');
+        var m = new Backbone.Model({id: 'add1', type: 'test'});
+        c.add(m);
+        c.add(m);
+      }).to.throw(/Model add blocked because it already exists as cid \d+/);
+    });
+
     it("Is transparent to backbone add event listener", function() {
       var e = new PolymerElementMock();
       var c = new Backbone.Collection();

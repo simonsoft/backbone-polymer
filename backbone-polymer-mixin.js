@@ -23,9 +23,11 @@ var BackbonePolymerAttach = function(element, pathPrefix) {
     if (_.isArray(model)) {
       throw new Error('backbone-polymer only accepts add of single model');
     }
-    // we should probably operate on the Collection.set level to be more allowing
     if (!this._isModel(model)) {
       throw new Error('backbone-polymer requires model instances, not just attributes');
+    }
+    if (this.get(model)) {
+      throw new Error('model already exists as' + this.get(model).cid);
     }
 
     var options = _.extend({merge: false}, options, addOptions);
