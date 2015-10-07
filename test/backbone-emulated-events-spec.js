@@ -8,12 +8,15 @@ var Backbone = require('yobo').Backbone;
 
 var BackbonePolymerAttach = require('../backbone-polymer-mixin');
 
-var PolymerElementMock = function() {
+var PolymerElementMock = function(testArray) {
 
   var spliced = this.spliced = [];
 
   this.splice = function(path, index, removeCount, items) {
     spliced.push({path: path, index: index, removeCount: removeCount, items: items});
+    if (typeof testArray !== 'undefined') {
+      testArray.splice.apply(testArray, [index, removeCount].concat(items));
+    }
   };
 
   this.notifyPath = function() {
@@ -84,8 +87,8 @@ describe("Array modification through Polymer splices, emulate backbone events", 
     });
 
     it("Is transparent to backbone add event listener", function() {
-      var e = new PolymerElementMock();
       var c = new Backbone.Collection();
+      var e = new PolymerElementMock(c.models);
 
       var adds = [];
       c.on('add', function(m, c, o) {
