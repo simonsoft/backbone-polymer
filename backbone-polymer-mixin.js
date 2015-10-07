@@ -20,11 +20,8 @@ var BackbonePolymerAttach = function(element, pathPrefix) {
   // Splices `insert` into `array` at index `at`.
   var splice = function(array, insert, at) {
     at = Math.min(Math.max(at, 0), array.length);
-    var tail = Array(array.length - at);
-    var length = insert.length;
-    for (var i = 0; i < tail.length; i++) tail[i] = array[i + at];
-    for (i = 0; i < length; i++) array[i + at] = insert[i];
-    for (i = 0; i < tail.length; i++) array[i + length + at] = tail[i];
+    var args = [pathPrefix + '.models', at, 0].concat(insert);
+    element.splice.apply(this, args);
   };
   // Update a collection by `set`-ing a new list of models, adding new ones,
   // removing models that are no longer present, and merging models that
