@@ -39,9 +39,12 @@ describe("Array modification through Polymer splices, emulate backbone events", 
       var c = new Backbone.Collection();
       c.add({id: 'a2', type: 'testmodel2'});
       c.add({id: 'a3', type: 'testmodel3'});
-      var m = new Backbone.Model({id: 'a1', type: 'testmodel'})
+      var m = new Backbone.Model({id: 'a1', type: 'testmodel'});
       c.on('add', function(model, collection, options) {
         console.log('add', m === model ? '(model)' : model, c === collection ? '(collection)' : collection, JSON.stringify(options));
+      });
+      m.on('add', function(model, collection, options) {
+        console.log('model add', m === model ? '(model)' : model, c === collection ? '(collection)' : collection, JSON.stringify(options));
       });
       var added = c.add(m, {at: 1});
       console.log('add returned', m === added ? '(model)' : model);
@@ -88,20 +91,26 @@ describe("Array modification through Polymer splices, emulate backbone events", 
 
       //Expects on the options obj.
       expect(adds[0].options).to.be.an('object');
-      expect(adds[0].options).to.have.property('add').and.equal(true);
-      expect(adds[0].options).to.have.property('merge').and.equal(false);
-      expect(adds[0].options).to.have.property('remove').and.equal(false);
+      expect(adds[0].options).to.have.property('add').that.equals(true);
+      expect(adds[0].options).to.have.property('merge').that.equals(false);
+      expect(adds[0].options).to.have.property('remove').that.equals(false);
       expect(adds[0].options).to.not.have.property('at');
       expect(adds[0].collection).to.have.property('length').and.equal(1);
 
       var m1 = new Backbone.Model({id: 'add2', type: 'test'});
+      modeladd = [];
+      m1.on('add', function(m, c, o) {
+        modeladd.push({model:m, collection:c, options:o});
+      });
       c.add(m1, {at: 1});
 
       //Adding at an index, expects Options to have 'at'
-      expect(adds[1].options).to.have.property('add').and.equal(true);
-      expect(adds[1].options).to.have.property('at').and.equal(1);
-      expect(adds[0].collection).to.have.property('length').and.equal(2);
+      expect(adds[1].options).to.have.property('add').that.equals(true);
+      expect(adds[1].options).to.have.property('at').that.equals(1);
+      expect(adds[1].collection).to.have.length(2);
       expect(e.spliced).to.have.length(2);
+      expect(modeladd).to.have.length(1);
+      expect(modeladd[0]).to.deep.equal(adds[1]);
 
       //Adding again at index 1, i.e. insert
       var m2 = new Backbone.Model({id: 'add3', type: 'test'});
