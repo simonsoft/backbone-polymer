@@ -131,6 +131,7 @@ describe("Array modification through Polymer splices, emulate backbone events", 
 
       // common Backbone operations
       expect(c.get('add1')).to.exist.and.have.property('cid');
+      expect(c.models).to.have.length(3);
       expect(c.at(1)).to.exist.and.have.property('cid');
     });
   });
