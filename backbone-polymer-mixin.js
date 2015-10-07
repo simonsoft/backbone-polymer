@@ -1,6 +1,5 @@
 
 var BackbonePolymerAttach = function(element, pathPrefix) {
-  console.log('BackbonePolymerAttach', this, element, pathPrefix);
 
   var indexOf = this.indexOf.bind(this);
 
@@ -21,7 +20,6 @@ var BackbonePolymerAttach = function(element, pathPrefix) {
   var addOptions = {add: true, remove: false}; // from backbone source
   this.add = function(model, options) {
     this.length = this.length + 1;
-    console.log('add (model)', model, '(options)', options);
     if (_.isArray(model)) {
       throw new Error('backbone-polymer only accepts add of single model');
     }
