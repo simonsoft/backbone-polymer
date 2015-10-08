@@ -1,6 +1,5 @@
 
 var BackbonePolymerAttach = function(element, pathPrefix) {
-  console.log('BackbonePolymerAttach', this, element, pathPrefix);
 
   var indexOf = this.indexOf.bind(this);
 
@@ -14,44 +13,36 @@ var BackbonePolymerAttach = function(element, pathPrefix) {
     });
   };
 
-  var splicesObject = this.models;
-
-  var addNotify = function(model) {
-    var ix = indexOf(model);
-
-    // https://www.polymer-project.org/1.0/docs/devguide/properties.html#array-observation
-    var change = {keySplices:[], indexSplices:[]};
-    change.keySplices.push({
-      index: ix,
-      removed: [],
-      removedItems: [],
-      added: [ix]
-    });
-    change.indexSplices.push({
-      index: ix,
-      addedCount: 1,
-      removed: [],
-      object: splicesObject,
-      type: 'splice',
-      addedKeys: [ix]
-    });
-
-    element.notifyPath(pathPrefix + '.models.splices', change);
-
-    // remove this timeout and the rendered element goes blank
-    window.setTimeout(function() {
-      // TODO would it be possible to notify .* here?
-      for (var attribute in model.attributes) {
-        // we could reuse code with modelSetup here
-        var value = model.get(attribute);
-        element.notifyPath(pathPrefix + '.models.' + ix + '.attributes.' + attribute, value);
-      }
-    }, 1);
-  };
-
   this.each(modelSetup.bind(this));
-  this.on('add', addNotify.bind(this));
-  this.on('add', modelSetup.bind(this));
+
+  // override Backbone add
+  var _add = this.add;
+  var addOptions = {add: true, remove: false}; // from backbone source
+  this.add = function(model, options) {
+    this.length = this.length + 1;
+    if (_.isArray(model)) {
+      throw new Error('backbone-polymer only accepts add of single model');
+    }
+    if (!this._isModel(model)) {
+      throw new Error('backbone-polymer requires model instances, not just attributes');
+    }
+    if (this.get(model)) {
+      throw new Error('backbone-polymer model already exists as cid ' + this.get(model).cid);
+    }
+
+    var options = _.extend({merge: false}, options, addOptions);
+    var ix = options.at || 0;
+
+    element.splice(pathPrefix + '.models', ix, 0, model);
+    this._addReference(model, options);
+    if (!options.silent) {
+      model.trigger('add', model, this, options);
+      this.trigger('update', this, options);
+    }
+
+    modelSetup.call(this, model);
+    return model;
+  };
 };
 
 if (typeof module !== 'undefined') {
