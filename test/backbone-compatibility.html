@@ -1,12 +1,20 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
+  <script src="../node_modules/mocha/mocha.js"></script>
+  <script src="../node_modules/web-component-tester/browser.js"></script>
 
-var expect = require('chai').expect;
+  <!-- lib dependencies -->
+  <script src="../node_modules/yobo/node_modules/underscore/underscore.js"></script>
+  <script src="../node_modules/yobo/node_modules/backbone/backbone.js"></script>
+  <script src="../backbone-polymer-mixin.js"></script>
 
-// still undecided on how the mixin gets dependencies
-_ = require('yobo')._;
-
-var Backbone = require('yobo').Backbone;
-
-var BackbonePolymerAttach = require('../backbone-polymer-mixin');
+  <link rel="import" href="../bower_components/polymer/polymer.html">
+</head>
+<body>
+<script>
 
 var PolymerElementMock = function(testArray) {
 
@@ -139,3 +147,7 @@ describe("Array modification through Polymer splices, emulate backbone events", 
     });
   });
 });
+
+</script>
+</body>
+</html>

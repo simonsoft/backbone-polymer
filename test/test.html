@@ -106,7 +106,7 @@
           expect(renderTimeAllowMs).to.be.at.least(2); // the sequence below is fragile, and there's a timeout in the notification too
 
           window.setTimeout(function() {
-            m1 = c1.add({type: 'text', content: 'As added after setup.'});
+            m1 = c1.add(new Backbone.Model({type: 'text', content: 'As added after setup.'}));
           }, renderTimeAllowMs);
 
           window.setTimeout(function() {
