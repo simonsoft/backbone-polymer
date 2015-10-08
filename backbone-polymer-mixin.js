@@ -40,7 +40,7 @@ var BackbonePolymerAttach = function(element, pathPrefix) {
       this.trigger('update', this, options);
     }
 
-    modelSetup.bind(model);
+    modelSetup.call(this, model);
     return model;
   };
 };
