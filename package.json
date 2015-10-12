@@ -1,6 +1,6 @@
 {
   "name": "backbone-polymer",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Makes Backbone Collection observable in webcomponents and Polymer templates",
   "main": "index.js",
   "scripts": {
@@ -19,13 +19,13 @@
   "homepage": "https://github.com/Simonsoft/backbone-polymer",
   "devDependencies": {
     "async": "^1.1.0",
-    "bower": "^1.4.1",
     "chai": "^2.3.0",
     "mocha": "^2.2.5",
     "stacky": "^1.2.2",
     "web-component-tester": "^3.3.17"
   },
   "dependencies": {
+    "bower": "^1.4.1",
     "yobo": "^0.4.0"
   }
 }
