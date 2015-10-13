@@ -19,9 +19,8 @@ var BackbonePolymerAttach = function(element, pathPrefix) {
   var _add = this.add;
   var addOptions = {add: true, remove: false}; // from backbone source
   this.add = function(model, options) {
-    this.length = this.length + 1;
     if (_.isArray(model)) {
-      throw new Error('backbone-polymer only accepts add of single model');
+      return _.map(model, this.add.bind(this));
     }
     if (!this._isModel(model)) {
       throw new Error('backbone-polymer requires model instances, not just attributes');
@@ -35,6 +34,7 @@ var BackbonePolymerAttach = function(element, pathPrefix) {
 
     element.splice(pathPrefix + '.models', ix, 0, model);
     this._addReference(model, options);
+    this.length++;
     if (!options.silent) {
       model.trigger('add', model, this, options);
       this.trigger('update', this, options);
