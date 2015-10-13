@@ -20,7 +20,7 @@ var BackbonePolymerAttach = function(element, pathPrefix) {
   var addOptions = {add: true, remove: false}; // from backbone source
   this.add = function(model, options) {
     if (_.isArray(model)) {
-      throw new Error('backbone-polymer only accepts add of single model');
+      return _.map(model, this.add.bind(this));
     }
     if (!this._isModel(model)) {
       throw new Error('backbone-polymer requires model instances, not just attributes');

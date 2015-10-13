@@ -68,14 +68,6 @@ describe("Array modification through Polymer splices, emulate backbone events", 
 
   describe("#add, reduced Backbone functionality", function() {
 
-    it("Accepts only a single item", function() {
-      expect(function() {
-        var c = new Backbone.Collection();
-        BackbonePolymerAttach.call(c, new PolymerElementMock(), 'edit.units');
-        c.add([]);
-      }).to.throw(/single/);
-    });
-
     it("Requires item to be a real model", function() {
       expect(function() {
         var c = new Backbone.Collection();
@@ -144,6 +136,18 @@ describe("Array modification through Polymer splices, emulate backbone events", 
       expect(c.get('add1')).to.exist.and.have.property('cid');
       expect(c.models).to.have.length(3);
       expect(c.at(1)).to.exist.and.have.property('cid');
+    });
+
+    it("Can add an array of models", function() {
+      var c = new Backbone.Collection();
+      var add1 = c.add([new Backbone.Model({id: 'a1', type: 't'}), new Backbone.Model({id: 'a2', type: 't'})]);
+      expect(add1).to.have.length(2);
+      var e = new PolymerElementMock(c.models);
+
+      BackbonePolymerAttach.call(c, e, 'edit.units');
+      var add2 = c.add([new Backbone.Model({id: 'a3', type: 't'}), new Backbone.Model({id: 'a4', type: 't'})]);
+      expect(add2).to.have.length(2);
+      expect(c).to.have.length(4);
     });
   });
 });
